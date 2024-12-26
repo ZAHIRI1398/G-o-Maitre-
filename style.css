@@ -84,21 +84,57 @@ header {
     z-index: 1;
 }
 
-#canvas-container {
-    background-color: white;
-    margin: 10px;
-    border-radius: 10px;
-    height: calc(100vh - 200px);
+#drawing-area {
     position: relative;
+    height: calc(100vh - 150px);
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#canvas-container {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.canvas-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
     width: 100%;
     height: 100%;
-    border: 1px solid #dbdbdb;
-    background-color: #FFFFFF;
-    cursor: crosshair;
+    display: block;
+}
+
+#pdf-container {
+    flex: 1;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    display: none;
+}
+
+#pdf-container.active {
+    display: block;
+}
+
+#pdf-container canvas {
+    margin: 10px auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 #text-input-container, #angle-input-container {

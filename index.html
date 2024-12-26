@@ -6,7 +6,6 @@
     <title>GÉOMAITRE</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="main.js"></script>
 </head>
 <body>
     <!-- En-tête avec logo -->
@@ -70,16 +69,18 @@
 
             <!-- Colonne centrale - Zone de dessin -->
             <div class="column is-half">
-                <div id="canvas-container">
-                    <canvas id="canvas"></canvas>
-                    <div id="text-input-container" style="display: none; position: absolute;">
-                        <input type="text" id="text-input" class="input is-small">
+                <div id="drawing-area">
+                    <div id="canvas-container">
+                        <canvas id="canvas"></canvas>
                     </div>
-                    <div id="angle-input-container" style="display: none; position: absolute;">
-                        <input type="number" id="angle-input" class="input is-small" min="0" max="360" step="1">
-                    </div>
+                    <div id="pdf-container"></div>
                 </div>
-                <div id="pdf-container"></div>
+                <div id="text-input-container" style="display: none; position: absolute;">
+                    <input type="text" id="text-input" class="input is-small">
+                </div>
+                <div id="angle-input-container" style="display: none; position: absolute;">
+                    <input type="number" id="angle-input" class="input is-small" min="0" max="360" step="1">
+                </div>
             </div>
 
             <!-- Colonne de droite - Outils divers -->
@@ -121,5 +122,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
