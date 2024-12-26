@@ -17,58 +17,60 @@
     <div class="container">
         <div class="columns">
             <!-- Colonne de gauche - Outils géométriques -->
-            <div class="column is-one-quarter">
-                <div class="menu">
+            <div class="column is-one-quarter" id="left-column">
+                <div class="menu tools-menu">
                     <p class="menu-label">OUTILS GÉOMÉTRIQUES</p>
-                    <ul class="menu-list">
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/point.png" alt="Point" id="btn-point" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/milieu.png" alt="Milieu" id="btn-milieu" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/segment.png" alt="Segment" id="btn-segment" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/droite.png" alt="Droite" id="btn-line" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/parallèle.png" alt="Parallèle" id="btn-parallele" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/perpendiculaire.png" alt="Perpendiculaire" id="btn-perpendiculaire" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/cercle.png" alt="Cercle" id="btn-circle" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/angle.png" alt="Angle" id="btn-angle" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/polygone.png" alt="Polygone" id="btn-polygon" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/gomme.png" alt="Gomme" id="btn-gomme" />
-                        </li>
-                        <li>
-                            <div class="field">
-                                <label class="label">Couleur:</label>
-                                <div class="control">
-                                    <input type="color" id="color-picker" value="#000000">
+                    <div class="tools-container">
+                        <ul class="menu-list">
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/point.png" alt="Point" id="btn-point" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/milieu.png" alt="Milieu" id="btn-milieu" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/segment.png" alt="Segment" id="btn-segment" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/droite.png" alt="Droite" id="btn-line" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/parallèle.png" alt="Parallèle" id="btn-parallele" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/perpendiculaire.png" alt="Perpendiculaire" id="btn-perpendiculaire" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/cercle.png" alt="Cercle" id="btn-circle" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/angle.png" alt="Angle" id="btn-angle" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/polygone.png" alt="Polygone" id="btn-polygon" />
+                            </li>
+                            <li>
+                                <img class="btn-with-image" src="images/navigations/gomme.png" alt="Gomme" id="btn-gomme" />
+                            </li>
+                            <li>
+                                <div class="field">
+                                    <label class="label">Couleur:</label>
+                                    <div class="control">
+                                        <input type="color" id="color-picker" value="#000000">
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        <li>
-                            <button id="btn-fill" class="button is-fullwidth">Remplir</button>
-                        </li>
-                    </ul>
+                            </li>
+                            <li>
+                                <button id="btn-fill" class="button is-fullwidth">Remplir</button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
             <!-- Colonne centrale - Zone de dessin -->
             <div class="column is-half">
-                <div id="canvas-container" style="height: calc(100vh - 50px); position: relative;">
+                <div id="canvas-container">
                     <canvas id="canvas"></canvas>
                     <div id="text-input-container" style="display: none; position: absolute;">
                         <input type="text" id="text-input" class="input is-small">
@@ -77,33 +79,42 @@
                         <input type="number" id="angle-input" class="input is-small" min="0" max="360" step="1">
                     </div>
                 </div>
+                <div id="pdf-container"></div>
             </div>
 
             <!-- Colonne de droite - Outils divers -->
-            <div class="column is-one-quarter">
-                <div class="menu">
+            <div class="column is-one-quarter" id="right-column">
+                <div class="menu tools-menu">
                     <p class="menu-label">OUTILS DIVERS</p>
-                    <ul class="menu-list">
-                        <li>
-                            <button class="button is-fullwidth" id="btn-text">Écrire Texte</button>
-                        </li>
-                        <li>
-                            <button class="button is-fullwidth" id="btn-add">Ajouter une page</button>
-                        </li>
-                        <li>
-                            <button class="button is-fullwidth" id="btn-prev">Page précédente</button>
-                        </li>
-                        <li>
-                            <button class="button is-fullwidth" id="btn-next">Page suivante</button>
-                        </li>
-                        <li>
-                            <button class="button is-fullwidth" id="btn-export">Exporter en PDF</button>
-                        </li>
-                        <li>
-                            <button class="button is-fullwidth" id="btn-import">Importer un PDF</button>
-                        </li>
-                        <input type="file" id="pdf-input" accept="application/pdf" style="display: none;">
-                    </ul>
+                    <div class="tools-container">
+                        <ul class="menu-list">
+                            <li>
+                                <button class="button is-fullwidth" id="btn-text">Écrire Texte</button>
+                            </li>
+                            <li>
+                                <button class="button is-fullwidth" id="btn-add">Ajouter une page</button>
+                            </li>
+                            <li>
+                                <button class="button is-fullwidth" id="btn-prev">Page précédente</button>
+                            </li>
+                            <li>
+                                <button class="button is-fullwidth" id="btn-next">Page suivante</button>
+                            </li>
+                            <li>
+                                <button class="button is-fullwidth" id="btn-export">Exporter en PDF</button>
+                            </li>
+                            <li>
+                                <div class="file is-fullwidth">
+                                    <label class="file-label">
+                                        <input class="file-input" type="file" id="pdf-input" accept="application/pdf">
+                                        <span class="file-cta">
+                                            <span class="file-label">Choisir un PDF...</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
