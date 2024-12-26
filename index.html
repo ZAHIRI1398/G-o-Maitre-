@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZÈOMÈTRIE</title>
+    <title>GÉOMAITRE</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="main.js"></script>
 </head>
 <body>
+    <!-- En-tête avec logo -->
+    <header>
+        <img src="images/logof.png" alt="Logo GéoMaitre" class="logo">
+    </header>
+
     <div class="container">
-        <!-- Colonne de gauche - Outils -->
         <div class="columns">
+            <!-- Colonne de gauche - Outils géométriques -->
             <div class="column is-one-quarter">
                 <div class="menu">
-                    <p class="menu-label">OUTILS DE CONSTRUCTION</p>
+                    <p class="menu-label">OUTILS GÉOMÉTRIQUES</p>
                     <ul class="menu-list">
                         <li>
                             <img class="btn-with-image" src="images/navigations/point.png" alt="Point" id="btn-point" />
+                        </li>
+                        <li>
+                            <img class="btn-with-image" src="images/navigations/milieu.png" alt="Milieu" id="btn-milieu" />
                         </li>
                         <li>
                             <img class="btn-with-image" src="images/navigations/segment.png" alt="Segment" id="btn-segment" />
@@ -30,9 +38,6 @@
                         </li>
                         <li>
                             <img class="btn-with-image" src="images/navigations/perpendiculaire.png" alt="Perpendiculaire" id="btn-perpendiculaire" />
-                        </li>
-                        <li>
-                            <img class="btn-with-image" src="images/navigations/milieu.png" alt="Milieu" id="btn-milieu" />
                         </li>
                         <li>
                             <img class="btn-with-image" src="images/navigations/cercle.png" alt="Cercle" id="btn-circle" />
@@ -61,16 +66,8 @@
                 </div>
             </div>
 
-            <!-- Zone de dessin -->
-            <div class="column">
-                <div class="buttons">
-                    <button class="button" id="btn-add">Nouvelle page</button>
-                    <button class="button" id="btn-prev">Page précédente</button>
-                    <button class="button" id="btn-next">Page suivante</button>
-                    <button class="button" id="btn-export">Exporter en PDF</button>
-                    <button class="button" id="btn-import">Importer un PDF</button>
-                    <input type="file" id="pdf-input" accept="application/pdf" style="display: none;">
-                </div>
+            <!-- Colonne centrale - Zone de dessin -->
+            <div class="column is-half">
                 <div id="canvas-container" style="height: calc(100vh - 50px); position: relative;">
                     <canvas id="canvas"></canvas>
                     <div id="text-input-container" style="display: none; position: absolute;">
@@ -81,10 +78,37 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Colonne de droite - Outils divers -->
+            <div class="column is-one-quarter">
+                <div class="menu">
+                    <p class="menu-label">OUTILS DIVERS</p>
+                    <ul class="menu-list">
+                        <li>
+                            <button class="button is-fullwidth" id="btn-text">Écrire Texte</button>
+                        </li>
+                        <li>
+                            <button class="button is-fullwidth" id="btn-add">Ajouter une page</button>
+                        </li>
+                        <li>
+                            <button class="button is-fullwidth" id="btn-prev">Page précédente</button>
+                        </li>
+                        <li>
+                            <button class="button is-fullwidth" id="btn-next">Page suivante</button>
+                        </li>
+                        <li>
+                            <button class="button is-fullwidth" id="btn-export">Exporter en PDF</button>
+                        </li>
+                        <li>
+                            <button class="button is-fullwidth" id="btn-import">Importer un PDF</button>
+                        </li>
+                        <input type="file" id="pdf-input" accept="application/pdf" style="display: none;">
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
 </body>
 </html>
