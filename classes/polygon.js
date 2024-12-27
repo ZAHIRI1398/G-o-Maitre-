@@ -3,7 +3,6 @@ export default class Polygon {
         this.ctx = ctx;
         this.points = [];
         this.isComplete = false;
-        this.fillColor = null;
     }
 
     addPoint(point) {
@@ -24,28 +23,6 @@ export default class Polygon {
         this.draw();
     }
 
-    setFillColor(color) {
-        this.fillColor = color;
-        this.draw();
-    }
-
-    // Vérifie si un point est à l'intérieur du polygone
-    containsPoint(x, y) {
-        if (!this.isComplete || this.points.length < 3) return false;
-
-        let inside = false;
-        for (let i = 0, j = this.points.length - 1; i < this.points.length; j = i++) {
-            const xi = this.points[i].x, yi = this.points[i].y;
-            const xj = this.points[j].x, yj = this.points[j].y;
-
-            const intersect = ((yi > y) !== (yj > y))
-                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-            if (intersect) inside = !inside;
-        }
-
-        return inside;
-    }
-
     draw() {
         if (this.points.length < 2) return;
 
@@ -58,15 +35,8 @@ export default class Polygon {
 
         if (this.isComplete) {
             this.ctx.closePath();
-            
-            // Remplir le polygone si une couleur est définie
-            if (this.fillColor) {
-                this.ctx.fillStyle = this.fillColor;
-                this.ctx.fill();
-            }
         }
 
-        // Tracer les contours
         this.ctx.strokeStyle = 'black';
         this.ctx.stroke();
 
@@ -94,6 +64,7 @@ export default class Polygon {
             const point1 = this.points[i];
             const point2 = this.points[(i + 1) % this.points.length];
             
+            // Calculer la distance du point au segment
             const A = point2.y - point1.y;
             const B = point1.x - point2.x;
             const C = point2.x * point1.y - point1.x * point2.y;
@@ -101,6 +72,7 @@ export default class Polygon {
             const distance = Math.abs(A * x + B * y + C) / Math.sqrt(A * A + B * B);
             
             if (distance < tolerance) {
+                // Vérifier si le point est entre les extrémités du segment
                 const dotProduct = (x - point1.x) * (point2.x - point1.x) + 
                                  (y - point1.y) * (point2.y - point1.y);
                 const squaredLength = Math.pow(point2.x - point1.x, 2) + 
