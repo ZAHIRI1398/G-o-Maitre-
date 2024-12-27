@@ -58,20 +58,6 @@ document.getElementById('btn-polygon').addEventListener('click', () => {
   canvasManager.setCurrentTool('polygon');
 });
 
-// Gestion du remplissage
-document.getElementById('btn-fill').addEventListener('click', () => {
-  canvasManager.setCurrentTool('fill');
-});
-
-// Gestion de la couleur
-let currentColor = '#000000';
-document.getElementById('color-picker').addEventListener('change', (event) => {
-  currentColor = event.target.value;
-});
-
-// Exposer la couleur courante
-window.getCurrentColor = () => currentColor;
-
 // Gestion des pages
 document.getElementById('btn-add').addEventListener('click', () => {
   canvasManager.addPage();
