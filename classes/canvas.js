@@ -466,18 +466,6 @@ export class CanvasPage {
         }
         break;
 
-      case 'fill':
-        // Chercher le polygone à remplir
-        for (const drawing of this.drawings) {
-          if (drawing instanceof Polygon && 
-              drawing.isComplete && 
-              drawing.containsPoint(mousePos.x, mousePos.y)) {
-            drawing.setFillColor(window.getCurrentColor());
-            break;
-          }
-        }
-        break;
-
       default:
         console.log('Outil non reconnu:', this.activeTool);
     }
