@@ -14,38 +14,33 @@ export default class Line {
     }
 
     draw() {
-        // Calculer la pente et l'ordonnée à l'origine
-        const slope = this.calcSlope();
-        const yIntercept = this.y1 - slope * this.x1;
-
-        // Calculer les points d'intersection avec les bords du canvas
-        const canvas = this.ctx.canvas;
-        const width = canvas.width;
-        const height = canvas.height;
-
-        // Points d'intersection avec les bords verticaux
-        const leftY = slope * 0 + yIntercept;
-        const rightY = slope * width + yIntercept;
-
-        // Points d'intersection avec les bords horizontaux
-        const topX = (0 - yIntercept) / slope;
-        const bottomX = (height - yIntercept) / slope;
-
-        // Trouver les deux points d'intersection qui sont dans les limites du canvas
-        let points = [];
-        if (leftY >= 0 && leftY <= height) points.push({x: 0, y: leftY});
-        if (rightY >= 0 && rightY <= height) points.push({x: width, y: rightY});
-        if (topX >= 0 && topX <= width) points.push({x: topX, y: 0});
-        if (bottomX >= 0 && bottomX <= width) points.push({x: bottomX, y: height});
-
-        // S'assurer qu'on a deux points pour tracer la ligne
-        if (points.length >= 2) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(points[0].x, points[0].y);
-            this.ctx.lineTo(points[1].x, points[1].y);
-            this.ctx.strokeStyle = 'blue';
-            this.ctx.stroke();
-        }
+        // Calculer la direction de la ligne
+        const dx = this.x2 - this.x1;
+        const dy = this.y2 - this.y1;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        
+        // Si les points sont trop proches, ne rien tracer
+        if (length < 1) return;
+        
+        // Normaliser le vecteur de direction
+        const dirX = dx / length;
+        const dirY = dy / length;
+        
+        // Extension de la droite (en pixels) de chaque côté
+        const extension = '400';
+        
+        // Calculer les points étendus
+        const startX = this.x1 - dirX * extension;
+        const startY = this.y1 - dirY * extension;
+        const endX = this.x2 + dirX * extension;
+        const endY = this.y2 + dirY * extension;
+        
+        // Tracer la ligne étendue
+        this.ctx.beginPath();
+        this.ctx.moveTo(startX, startY);
+        this.ctx.lineTo(endX, endY);
+        this.ctx.strokeStyle = 'blue';
+        this.ctx.stroke();
     }
 
     isPointNear(x, y, tolerance = 5) {
