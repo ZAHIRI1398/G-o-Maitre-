@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JeMaths-Zahiri.A</title>
+    <!-- Importation de Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // Configuration de PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    window.jsPDF = window.jspdf.jsPDF;
+  </script>
+  </head>
+
+  <body>
+    <!-- En-tête -->
+    <header>
+      <img src="images/logof.png" alt="Logo de mon sitezahiri" id="site-logo" />
+    </header>
+    <!-- Contenu principal -->
+    <div class="container">
+      <!-- Colonne de gauche -->
+      <div class="is-one-quarter left-col compact-sidebar">
+        <div class="box">
+          <aside class="menu">
+            <p class="menu-label">🔧 OUTILS GÉOMÉTRIQUES</p>
+            <div class="select-wrapper">
+              <select id="geometric-tools" class="tool-select">
+                <option value="">-- Choisir un outil --</option>
+                <option value="gomme">🧹 Gomme</option>
+                <option value="point">📍 Point</option>
+                <option value="segment">📏 Segment</option>
+                <option value="segment-known">📐 Segment mesuré</option>
+                <option value="milieu">⊙ Milieu</option>
+                <option value="droite">➖ Droite</option>
+                <option value="parallele">⫽ Parallèle</option>
+                <option value="perpendiculaire">⊥ Perpendiculaire</option>
+                <option value="compas">⭕ Cercle</option>
+                <option value="compas-known">◯ Cercle (rayon)</option>
+                <option value="angle">∠ Angle</option>
+                <option value="polygon">▱ Polygone</option>
+                <option value="fill">🎨 Remplir</option>
+              </select>
+            </div>
+            
+            <!-- Ajout du sélecteur de couleurs -->
+            <div class="tool-group compact">
+                <h3>🎨 Couleurs</h3>
+                <div class="color-picker">
+                    <label for="color-picker">Contour:</label>
+                    <input type="color" id="color-picker" value="#000000">
+                </div>
+                <div class="color-picker">
+                    <label for="fill-color-picker">Remplissage:</label>
+                    <input type="color" id="fill-color-picker" value="#ff0000">
+                </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <!-- Colonne centrale -->
+      <div class="column">
+        <div class="box" id="center-column">
+          <div id="container1"></div>
+        </div>
+      </div>
+      <!-- Colonne de droite -->
+      <div class="column is-one-quarter compact-sidebar">
+        <div class="box">
+          <aside class="menu">
+            <p class="menu-label">📂 OUTILS DIVERS</p>
+            
+            <!-- Upload fichier -->
+            <div class="compact-file-upload">
+              <label class="file-label compact">
+                <input
+                  class="file-input"
+                  type="file"
+                  name="pdf"
+                  id="pdf-input"
+                  accept="application/pdf,image/*"
+                />
+                <span class="file-cta compact">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">Fichier PDF</span>
+                </span>
+              </label>
+              <p id="file-name" class="help"></p>
+            </div>
+
+            <!-- Actions rapides -->
+            <div class="select-wrapper mt-3">
+              <select id="action-tools" class="tool-select">
+                <option value="">-- Actions --</option>
+                <option value="save">💾 Enregistrer</option>
+                <option value="text">✍️ Écrire Texte</option>
+                <option value="read">🔊 Lire le texte</option>
+                <option value="stop-read">⏹️ Stop lecture</option>
+                <option value="glisser-nombre">🔢 Glisser Nombre</option>
+                <option value="glisser-mesure">📏 Glisser Mesure</option>
+              </select>
+            </div>
+
+            <!-- Boutons de zoom compacts -->
+            <div class="zoom-controls mt-3">
+              <p class="menu-label small">🔍 Zoom</p>
+              <div class="buttons has-addons is-centered">
+                <button class="button is-small" id="btn-zoom-out">
+                  <span class="icon is-small">
+                    <i class="fas fa-minus"></i>
+                  </span>
+                </button>
+                <button class="button is-small" id="btn-zoom-reset">
+                  <span>100%</span>
+                </button>
+                <button class="button is-small" id="btn-zoom-in">
+                  <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+    <!-- Popup Glisser Nombre -->
+    <div id="glisser-nombre-popup" class="popup">
+      <span class="close">⬅️ Quitter</span>
+      <iframe
+        src="https://www.openedu.fr/appliquettes/openboard/1_5/glisse_nombre.wgt/index.html"
+        width="100%"
+        height="100%"
+      ></iframe>
+    </div>
+
+    <!-- Popup Glisser Mesure -->
+    <div id="glisser-mesure-popup" class="popup">
+      <span class="close">⬅️ Quitter</span>
+      <iframe
+        src="outils/glisse_mesure/index.html"
+        width="100%"
+        height="100%"
+      ></iframe>
+    </div>
+    <!-- Conteneur PDF -->
+    <div id="pdf-container" class="container mt-5"></div>
+    
+    <!-- Boutons cachés pour compatibilité JavaScript -->
+    <div style="display: none;">
+      <button id="btn-save"></button>
+      <button id="btn-text"></button>
+      <button id="btn-read"></button>
+      <button id="btn-stop-read"></button>
+      <button id="btn-glisser-nombre"></button>
+      <button id="btn-glisser-mesure"></button>
+    </div>
+    
+    <!-- Scripts -->
+    <script type="module" src="main.js"></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+    ></script>
+   
+  </body>
+</html>

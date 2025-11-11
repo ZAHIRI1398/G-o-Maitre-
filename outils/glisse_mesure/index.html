@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Convertisseur d'unités</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffa500;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .unit-selector {
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .conversion-table {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+        }
+        .prefix-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            margin-bottom: -5px;
+        }
+        .prefix-cell {
+            width: 100px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .units-row {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f0f0f0;
+            padding: 10px;
+            position: relative;
+        }
+        .unit-cell {
+            width: 100px;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .input-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            position: relative;
+        }
+        .input-cell {
+            width: 100px;
+            text-align: center;
+        }
+        .input-cell input {
+            width: 40px;
+            text-align: center;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .km { background-color: #ffb74d; }
+        .hm { background-color: #fff176; }
+        .dam { background-color: #81c784; }
+        .m { background-color: #ffffff; }
+        .dm { background-color: #ba68c8; }
+        .cm { background-color: #f06292; }
+        .mm { background-color: #ef5350; }
+        .extra-left input, .extra-right input {
+            background-color: #f5f5f5;
+            border: 1px dashed #ccc;
+        }
+        .extra-left, .extra-right {
+            opacity: 0.7;
+        }
+        .decimal-point {
+            width: 10px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+            bottom: -25px;
+            cursor: pointer;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        .decimal-point::before {
+            content: ',';
+            position: absolute;
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+            top: -5px;
+            left: 2px;
+        }
+        .controls {
+            margin-top: 40px;
+            text-align: center;
+        }
+        button {
+            padding: 5px 15px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="unit-selector">
+            <select id="measureType">
+                <option value="longueurs">Longueurs</option>
+                <option value="masses">Masses</option>
+                <option value="contenances">Contenances</option>
+            </select>
+        </div>
+
+        <div class="conversion-table">
+            <div class="prefix-row">
+                <div class="prefix-cell"></div>
+                <div class="prefix-cell"></div>
+                <div class="prefix-cell">kilo</div>
+                <div class="prefix-cell">hecto</div>
+                <div class="prefix-cell">déca</div>
+                <div class="prefix-cell">unité</div>
+                <div class="prefix-cell">déci</div>
+                <div class="prefix-cell">centi</div>
+                <div class="prefix-cell">milli</div>
+                <div class="prefix-cell"></div>
+                <div class="prefix-cell"></div>
+            </div>
+            <div class="units-row">
+                <div class="input-cell extra-left"><input type="text" maxlength="1" pattern="[0-9]" /></div>
+                <div class="input-cell extra-left"><input type="text" maxlength="1" pattern="[0-9]" /></div>
+                <div class="unit-cell km">km</div>
+                <div class="unit-cell hm">hm</div>
+                <div class="unit-cell dam">dam</div>
+                <div class="unit-cell m">m</div>
+                <div class="unit-cell dm">dm</div>
+                <div class="unit-cell cm">cm</div>
+                <div class="unit-cell mm">mm</div>
+                <div class="input-cell extra-right"><input type="text" maxlength="1" pattern="[0-9]" /></div>
+                <div class="input-cell extra-right"><input type="text" maxlength="1" pattern="[0-9]" /></div>
+            </div>
+            <div class="input-row">
+                <div class="input-cell extra-left"><input type="text" maxlength="1" pattern="[0-9]" id="left2" /></div>
+                <div class="input-cell extra-left"><input type="text" maxlength="1" pattern="[0-9]" id="left1" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="km" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="hm" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="dam" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="m" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="dm" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="cm" /></div>
+                <div class="input-cell"><input type="text" maxlength="1" pattern="[0-9]" id="mm" /></div>
+                <div class="input-cell extra-right"><input type="text" maxlength="1" pattern="[0-9]" id="right1" /></div>
+                <div class="input-cell extra-right"><input type="text" maxlength="1" pattern="[0-9]" id="right2" /></div>
+            </div>
+            <div id="decimalPoint" class="decimal-point"></div>
+        </div>
+
+        <div class="controls">
+            <button id="reset">Réinitialiser</button>
+        </div>
+    </div>
+
+    <script>
+        const measureType = document.getElementById('measureType');
+        const decimalPoint = document.getElementById('decimalPoint');
+        const resetBtn = document.getElementById('reset');
+        const conversionTable = document.querySelector('.conversion-table');
+        const inputs = ['left2', 'left1', 'km', 'hm', 'dam', 'm', 'dm', 'cm', 'mm', 'right1', 'right2'].map(id => document.getElementById(id));
+
+        let currentPosition = 3; // Position initiale (m)
+        let isDragging = false;
+
+        // Mise à jour des unités et préfixes selon le type de mesure
+        measureType.addEventListener('change', function() {
+            const units = {
+                'longueurs': ['km', 'hm', 'dam', 'm', 'dm', 'cm', 'mm'],
+                'masses': ['kg', 'hg', 'dag', 'g', 'dg', 'cg', 'mg'],
+                'contenances': ['kL', 'hL', 'daL', 'L', 'dL', 'cL', 'mL']
+            };
+            
+            const selectedUnits = units[this.value];
+            document.querySelectorAll('.unit-cell').forEach((cell, index) => {
+                cell.textContent = selectedUnits[index];
+            });
+        });
+
+        // Gestion du déplacement de la virgule
+        decimalPoint.style.left = `${(currentPosition + 3) * (100/11)}%`;
+
+        decimalPoint.addEventListener('mousedown', (e) => {
+            isDragging = true;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = conversionTable.getBoundingClientRect();
+            const cellWidth = rect.width / 11;
+            let x = e.clientX - rect.left;
+            
+            // Limiter le déplacement aux frontières des cellules
+            x = Math.max(0, Math.min(x, rect.width));
+            const position = Math.floor(x / cellWidth);
+            
+            if (position !== currentPosition) {
+                currentPosition = position;
+                decimalPoint.style.left = `${(position + 1) * (100/11)}%`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Validation des entrées (seulement les chiffres de 0 à 9)
+        inputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length > 1) {
+                    this.value = this.value.slice(0, 1);
+                }
+            });
+
+            // Passer automatiquement à la case suivante
+            input.addEventListener('keyup', function(e) {
+                if (this.value.length === 1) {
+                    const currentIndex = inputs.indexOf(this);
+                    if (currentIndex < inputs.length - 1) {
+                        inputs[currentIndex + 1].focus();
+                    }
+                }
+            });
+        });
+
+        // Réinitialisation
+        resetBtn.addEventListener('click', () => {
+            inputs.forEach(input => input.value = '');
+            currentPosition = 3;
+            decimalPoint.style.left = `${(currentPosition + 3) * (100/11)}%`;
+        });
+    </script>
+</body>
+</html>
