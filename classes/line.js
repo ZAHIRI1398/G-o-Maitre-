@@ -27,7 +27,7 @@ export default class Line {
         const dirY = dy / length;
         
         // Extension de la droite (en pixels) de chaque côté
-        const extension = '400';
+        const extension = '300';
         
         // Calculer les points étendus
         const startX = this.x1 - dirX * extension;
