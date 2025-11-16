@@ -11,7 +11,65 @@ import {
   findMidpoint,
   getCloserSegment,
 } from './utils.js';
+// Étiquette de mesure de segment (longueur en cm)
+class MeasurementLabel {
+  constructor(ctx, x, y, text) {
+    this.ctx = ctx;
+    this.x = x;
+    this.y = y;
+    this.text = text;        // ex: "5.3 cm"
+    this.font = '16px Arial';
+    this.paddingX = 6;
+    this.paddingY = 4;
+  }
 
+  draw() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    ctx.font = this.font;
+    const textWidth = ctx.measureText(this.text).width;
+    const textHeight = 16; // approx
+
+    const boxX = this.x - textWidth / 2 - this.paddingX;
+    const boxY = this.y - textHeight - 8;
+    const boxW = textWidth + this.paddingX * 2;
+    const boxH = textHeight + this.paddingY * 2;
+
+    // fond + bordure
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.rect(boxX, boxY, boxW, boxH);
+    ctx.fill();
+    ctx.stroke();
+
+    // texte
+    ctx.fillStyle = 'red';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(this.text, boxX + this.paddingX, boxY + boxH / 2);
+
+    ctx.restore();
+
+    // mémoriser la boîte pour la gomme
+    this.boxX = boxX;
+    this.boxY = boxY;
+    this.boxW = boxW;
+    this.boxH = boxH;
+  }
+
+  // savoir si un clic est sur l’étiquette (pour la gomme)
+  isPointInside(x, y) {
+    if (this.boxX == null) return false;
+    return (
+      x >= this.boxX &&
+      x <= this.boxX + this.boxW &&
+      y >= this.boxY &&
+      y <= this.boxY + this.boxH
+    );
+  }
+}
 export class CanvasPage {
   constructor(canvas, ctx) {
     this.canvas = canvas;
@@ -29,6 +87,7 @@ export class CanvasPage {
     this.pdfContext = null;
     this.textTool = null;
     this.fillColor = null;
+
 
     // Créer un canvas de fond pour le PDF
     this.pdfCanvas = document.createElement('canvas');
@@ -93,15 +152,27 @@ export class CanvasPage {
   }
 
   setActiveTool(tool) {
-    console.log('Définition de l\'outil actif:', tool);
-    this.activeTool = tool;
-    
-    // Créer le textTool si nécessaire
-    if (tool === 'text' && !this.textTool) {
-      this.textTool = new Text(this.canvas, this.ctx, () => this.redraw());
-    }
+  console.log("Définition de l'outil actif:", tool);
+
+  // Outil main : désactiver le dessin
+  if (tool === 'hand') {
+    this.activeTool = null;
+    this.startPoint = null;
+    this.vertex = null;
+    this.currentPolygon = null;
+    this.referenceLine = null;
+    this.perpendicularPoint = null;
+    this.cirlePoints = [];
+    return;
   }
 
+  this.activeTool = tool;
+
+  // Créer le textTool si nécessaire
+  if (tool === 'text' && !this.textTool) {
+    this.textTool = new Text(this.canvas, this.ctx, () => this.redraw());
+  }
+}
   setFillColor(color) {
     this.fillColor = color;
   }
@@ -170,6 +241,30 @@ export class CanvasPage {
           console.log('Milieu marqué!');
         }
         break;
+                case 'measure-segment':
+        {
+          console.log('Mesure du segment le plus proche...');
+          const closestSegment = getCloserSegment(this.drawings, mousePos.x, mousePos.y);
+
+          if (closestSegment) {
+            const lengthPx = closestSegment.getLength();
+            const pxPerCm = window.cmToPx || 37.795; // même base que le reste
+            const lengthCm = lengthPx / pxPerCm;
+
+            // milieu du segment
+            const midX = (closestSegment.point1.x + closestSegment.point2.x) / 2;
+            const midY = (closestSegment.point1.y + closestSegment.point2.y) / 2;
+
+            const labelText = lengthCm.toFixed(1) + ' cm';
+
+            // Créer une étiquette PERSISTANTE
+            const label = new MeasurementLabel(this.ctx, midX, midY, labelText);
+            this.drawings.push(label);
+            this.redraw();
+          }
+        }
+        break;    
+
 
       case 'text':
         if (this.textTool) {
@@ -432,6 +527,14 @@ export class CanvasPage {
               const distance = Math.sqrt(dx * dx + dy * dy);
               
               if (distance < tolerance) {
+                this.drawings.splice(i, 1);
+                this.redraw();
+                break;
+              }
+            }
+                          // Étiquettes de mesure
+            else if (drawing instanceof MeasurementLabel) {
+              if (drawing.isPointInside(clickPoint.x, clickPoint.y)) {
                 this.drawings.splice(i, 1);
                 this.redraw();
                 break;
